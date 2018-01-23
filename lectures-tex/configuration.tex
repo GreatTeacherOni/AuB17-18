@@ -1,0 +1,161 @@
+% packages ---------------------------------------------------------------------------------------------------- packages
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{cancel}
+\usepackage{listings}
+\usepackage{multirow}
+\usepackage{hhline}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage[all,dvips,arc,curve,color,frame]{xy}
+\usepackage[yyyymmdd,hhmm]{datetime}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage[table]{xcolor,colortbl}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{tabularx}
+\usepackage{footnote}
+\usepackage{multicol}
+\usepackage{stackengine}
+\usepackage[norndcorners,customcolors,shade]{hf-tikz}
+\usepackage{siunitx}
+\usepackage{algorithm}
+\usepackage[]{algorithmic}
+% \usepackage[noend]{algorithmic}
+
+% pgf plotsets -------------------------------------------------------------------------------------------- pgf plotsets
+\pgfplotsset{ticks=none}
+\pgfplotsset{width=10cm, compat=1.5.1}
+
+% tikz libraries ---------------------------------------------------------------------------------------- tikz libraries
+\usetikzlibrary{shapes}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes.misc}
+\usetikzlibrary{shapes.arrows,calc,quotes,babel}
+\usetikzlibrary{positioning,arrows,chains,scopes,fit}
+\usetikzlibrary{matrix,backgrounds}
+\usetikzlibrary{trees}
+\usetikzlibrary{calc}
+\usetikzlibrary{tikzmark}
+\usetikzlibrary{intersections}
+
+
+\sisetup{
+locale = DE ,
+per-mode = symbol
+}
+
+\algsetup{indent=2em}
+\newlength\myindent
+\setlength\myindent{2em}
+\newcommand\bindent{%
+    \begingroup
+    \setlength{\itemindent}{\myindent}
+    \addtolength{\algorithmicindent}{\myindent}
+}
+\newcommand\eindent{\endgroup}
+
+% commands ---------------------------------------------------------------------------------------------------- commands
+\setlength{\parindent}{0pt}
+\newcommand{\includepic}[2]{\includegraphics[width=#2\textwidth,height=#2\textheight,keepaspectratio]{#1}}
+\newcommand\circlearound[1]{%
+\tikz[baseline]\node[draw,shape=circle,anchor=base] {#1} ;}
+\newcommand{\emptyrow}[0]{\multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &
+\multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} &
+\multicolumn{1}{c}{} & \multicolumn{1}{c|}{} & & \\}
+\newcommand\underbracetext[1]{\raisebox{1ex}{\ensuremath{\underbrace{\hphantom{\text{#1}}}_{\text{\normalsize #1}}}}}
+\newcommand{\headerline}[3]{
+\subject{#2}
+\title{#1}
+\subtitle{#3}
+\date{Letztes Update: \today \ - \currenttime \ Uhr}
+\maketitle
+}
+\newcommand{\newproof}[2]{
+\vspace*{0.3cm} \textbf{\textsf{Satz:}} #1
+
+\vspace*{0.3cm} \textbf{\textsf{Beweis:}} #2 \vspace*{0.3cm}
+}
+%\newcommand{\uparrow}[0]{\rlap{\scalebox{1.6}{$\uparrow$}}}
+\newlength\dlf
+\newcommand{\proofend}[0]{\hfill $\square$}
+\newcommand\drawbi[7][4pt]{%
+    \path(#2)--(#3)coordinate[at start](h1)coordinate[at end](h2);
+    \draw[#4]($(h1)!#1!90:(h2)$)-- node [auto=left] {#5} ($(h2)!#1!-90:(h1)$);
+    \draw[#6]($(h1)!#1!-90:(h2)$)-- node [auto=right] {#7} ($(h2)!#1!90:(h1)$);
+    }
+
+% colors -------------------------------------------------------------------------------------------------------- colors
+\definecolor{amethyst}{rgb}{0.6, 0.4, 0.8}
+\definecolor{anti-flashwhite}{rgb}{0.95, 0.95, 0.96}
+\definecolor{applegreen}{rgb}{0.55, 0.71, 0.0}
+\definecolor{babyblue}{rgb}{0.54, 0.81, 0.94}
+\definecolor{bistre}{rgb}{0.24, 0.17, 0.12}
+\definecolor{buff}{rgb}{0.94, 0.86, 0.51}
+\definecolor{dodgerblue}{rgb}{0.12, 0.56, 1.0}
+\definecolor{icterine}{rgb}{0.99, 0.97, 0.37}
+\definecolor{tan}{rgb}{0.82, 0.71, 0.55}
+\definecolor{upforestgreen}{rgb}{0.0, 0.27, 0.13}
+
+% listing colors
+\definecolor{listingBlue}{rgb}{0.13,0.13,1}
+\definecolor{listingGreen}{rgb}{0,0.5,0}
+\definecolor{listingRed}{rgb}{0.9,0,0}
+\definecolor{listingGrey}{rgb}{0.46,0.45,0.48}
+
+% listings ---------------------------------------------------------------------------------------------------- listings
+\lstset{basicstyle=\ttfamily}
+\lstset{literate=%
+{Ö}{{\"O}}1
+{Ä}{{\"A}}1
+{Ü}{{\"U}}1
+{ß}{{\ss}}1
+{ü}{{\"u}}1
+{ä}{{\"a}}1
+{ö}{{\"o}}1
+}
+\lstset{language=Java,
+showspaces=false,
+showtabs=false,
+breaklines=true,
+showstringspaces=false,
+breakatwhitespace=true,
+commentstyle=\color{listingGreen},
+keywordstyle=\color{listingBlue},
+stringstyle=\color{listingRed},
+basicstyle=\ttfamily,
+moredelim=[il][\textcolor{listingGrey}]{$$},
+moredelim=[is][\textcolor{listingGrey}]{\%\%}{\%\%}
+}
+\lstdefinelanguage{Kotlin}{
+  keywords={package, as, typealias, this, super, val, var, fun, for, null, true, false, is, in, throw, return, break, continue, object, if, try, else, while, do, when, yield, typeof, yield, typeof, class, interface, enum, object, override, public, private, get, set, import, abstract, },
+  keywordstyle=\color{listingBlue}\bfseries,
+  ndkeywords={@Deprecated, Iterable, Int, Integer, Float, Double, String, Runnable, dynamic},
+  ndkeywordstyle=\color{amethyst}\bfseries,
+  emph={println, return@, forEach,},
+  emphstyle={\color{orange}},
+  identifierstyle=\color{black},
+  sensitive=true,
+  commentstyle=\color{listingGreen}\ttfamily,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  stringstyle=\color{listingRed}\ttfamily,
+  morestring=[b]",
+  morestring=[s]{"""*}{*"""},
+  numbers=left,
+}
+
+% misc ------------------------------------------------------------------------------------------------------------ misc
+\graphicspath{ {../lectures-img/} }
+\setlength{\parindent}{0pt}
+
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}} % zentriert mit Breitenangabe
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}} % rechtsbündig mit Breitenangabe
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}} % rechtsbündig mit Breitenangabe

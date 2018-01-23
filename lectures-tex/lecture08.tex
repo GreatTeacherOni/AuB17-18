@@ -1,0 +1,203 @@
+\documentclass{scrartcl}% siehe <http://www.komascript.de>
+\input{../lectures-tex/configuration}
+
+\begin{document}
+    % ----------------------------------------------------------------------------
+    \subject{Vorlesungsmitschrift}
+    \title{Algorithmen und Berechenbarkeit}
+    \subtitle{Vorlesung 08}
+    \date{Letztes Update: \today \ - \currenttime \ Uhr}
+    \maketitle
+    % ----------------------------------------------------------------------------
+
+
+    \subsection*{Weitere Sätze zum Wörterbuchproblem / Hashing}\label{subsec:erwarteteSuchzeit}
+    \textbf{\textsf{Satz:}} Sei $x$ ein zufälliges (gleichverteiltes) Element aus $S$, dann ist die erwartete Suchzeit für $x$
+    \begin{equation*}
+        \mathcal{O}\left(1+\dfrac{1}{n} \sum_{i=0}^{m-1}\dfrac{l_i \cdot (l_i + 1)}{2}\right)
+    \end{equation*}
+    \textit{Besser wäre eine Schranke unabhängig von $l_i$, aber $\sum_{i}l_i = n$ sagt nichts über $\sum_{i}l_{i}^2$.}
+
+    \vspace*{0.3cm}
+    \textbf{\textsf{Beweis:}} Wenn $x$ das $j$-te Element seiner Liste ist, ist die Suchzeit $\mathcal{O}(1+j)$.
+    Also ist die erwartete Suchzeit
+
+    \begin{equation*}
+        \mathcal{O} \left( \sum_{i=0}^{m-1}\sum_{j=1}^{l_i} \right) = \mathcal{O}\left( 1+ \frac{1}{n} \sum_{i=0}^{m-1} \frac{l_i - (l_i+1)}{2} \right)
+    \end{equation*}
+    \proofend
+
+    \vspace*{0.6cm}
+    \textbf{\textsf{Satz:}} Sei $S$ eine zufällige (gleichverteilte) Teilmenge aus $U$ der Größe $n$. Dann ist die erwartete Suchzeit für ein zufälliges $x \in S$
+    \begin{equation*}
+        \mathcal{O}\left(1+\beta \cdot \frac{3}{2} \cdot l^\beta\right)
+    \end{equation*}
+
+    \vspace*{0.3cm}
+    \textbf{\textsf{Beweis:}} Wird nicht bewiesen.
+    \vspace*{0.3cm}
+
+    Die beiden letzten Fälle besagen im Prinzip: Falls $S \subseteq U$ zufällig gewählt wurde, ist alles gut.
+    Praktisch ist das aber nicht der Fall.
+
+    \section*{Universelles Hashing}
+    Sei $\mathcal{H}$ eine Menge von Hashfunktionen von $U$ nach $\{0,1,\cdots, m-1\}$.
+    Für $c > 1$ heißt $\mathcal{H}$ nun $c$-universell, falls für alle $x, y \in U$ mit $ x \neq y$ gilt:
+    \begin{equation*}
+        \frac{|\{ h \in \mathcal{H}:\ h(x) = h(y) \} |}{\mathcal{H}} \leq \frac{c}{m}
+    \end{equation*}
+    Die Gleichung sagt also prinzipiell aus, dass der Anteil der Funktionen, die zwei Inputparameter auf denselben Wert abbildet, nicht \textit{zu} groß ist.
+    Es ist also ein Maß für die Qualität einer Menge von Hashfunktionen.
+
+    \textbf{\textsf{Satz:}} Seien $a,b \in \{ 0,1,\cdots,N-1 \}$ und sei $h_{a,b} \longmapsto ((ax + b)\text{ mod } N)\text{ mod } m$.
+    Dann ist die Klasse $\mathcal{H} = \{ h_{a,b}: 0 \leq a \leq N-1 \land 0 \leq b \leq N-1 \}$ $c$-universell mit
+    \begin{equation*}
+        c&= \frac{\left\lceil\frac{N}{m}\right\rceil}{\frac{N}{m}} \approx 1\\\nonumber
+    \end{equation*}
+
+    \vspace*{0.3cm}
+    \textbf{\textsf{Beweis:}} Wird eine Übungsaufgabe.
+    \vspace*{0.6cm}
+
+    \textbf{\textsf{Satz:}} Benutzt man Hashing mit Verkettung und wählt $n \in \mathcal{H}$ zufällig gleichverteilt, wobei $\mathcal{H}$ $c$-universell ist, dann ist die erwartete Suchzeit
+    \begin{equation*}
+        \begin{align}
+            \mathcal{O}(1+ c \cdot \beta)
+        \end{align}
+    \end{equation*}
+    für beliebige Mengen $S \subseteq U$ und $|S| = n$.
+
+    \vspace*{0.3cm}
+    \textbf{\textsf{Beweis:}} Die Zeit für den Zugriff auf ein $x$
+    ist $ < 1 + \underbrace{\overbrace{\#}^{\text{Anzahl}}(y \in S \text{ mit }h(x)=h(y))}_{\text{Wird jetzt gezeigt}}$.
+    Dazu sei
+    \begin{equation*}
+        \delta_h(x,y) =
+        \[ \begin{cases}
+               1 & \text{falls } h(x) = h(y) \\
+               0 & \text{sonst}
+        \end{cases}
+        \]
+    \end{equation*}
+
+    Dann ist
+
+    \begin{equation*}
+        \begin{align*}
+            \tikzmarkin[green!30]{a}(0,-0.6)(1.4,0.65) \frac{1}{|\mathcal{H}|} \sum_{h \in \mathcal{H}}\tikzmarkend{a}
+            \sum_{y \in S}\delta_h(x,y) &= \frac{1}{|\mathcal{H}|}\sum_{y \in S} \tikzmarkin[blue!30]{b}(0,-0.6)(2.1,0.65)\sum_{h \in \mathcal{H}}\delta_h(x,y)\tikzmarkend{b} \\\nonumber
+        \end{align*}
+    \end{equation*}
+
+    wobei
+
+    \begin{equation*}
+        \begin{align*}
+            \tikzmarkin[green!30]{a}(0,-0.5)(1.4,0.6) \frac{1}{|\mathcal{H}|} \sum_{h \in \mathcal{H}}\tikzmarkend{a}
+            &\Rightarrow \text{Berechnet den Erwartungswert über alle möglichen Hashfunktionen}  \\\nonumber
+            \tikzmarkin[blue!30]{b}(0,-0.5)(2.025,0.4)\sum_{h \in \mathcal{H}}\delta_h(x,y)\tikzmarkend{b}
+            &\Rightarrow \text{Anzahl der Hashfunktionen, die $x$ und $y$ auf denselben Wert hashen:} \\\nonumber
+            & \phantom{\Rightarrow} \rightarrow \text{Für } x = y: \qquad |\mathcal{H}|\\\nonumber
+            & \phantom{\Rightarrow} \rightarrow \text{Für } x \neq y: \qquad \frac{c}{m} \cdot |\mathcal{H}|,
+            \text{ da $\mathcal{H}\ c$-universell ist }\\\nonumber
+        \end{align*}
+    \end{equation*}
+
+    Also
+
+    \begin{equation*}
+        \begin{align*}
+            \frac{1}{|\mathcal{H}|} \sum_{h \in \mathcal{H}} \sum_{y \in S}\delta_h(x,y) &= \frac{1}{|\mathcal{H}|}\sum_{y \in S} \sum_{h \in \mathcal{H}}\delta_h(x,y) \\\nonumber
+            & \leq \sum_{y \in S}\left[\text{\texttt{\textcolor{listingBlue}{if}} $(x=y)$ $1$ \texttt{\textcolor{listingBlue}{else}} } \frac{c}{m}\right] \\\nonumber
+            & \leq \begin{cases}
+                       1 + \frac{c \cdot (n-1)}{m} & x \in S \\
+                       \frac{c}{m} \cdot n & x \notin
+            \end{cases} \\\nonumber
+            & \leq 1 + c \cdot \beta \\\nonumber
+        \end{align*}
+    \end{equation*}
+    \textit{Besser wäre nicht nur eine erwartete sondern auch eine Worst-Case-Zugriffszeit von $\mathcal{O}(1)$, aber das kommt später.}
+    \proofend
+
+    \section*{Perfektes Hashing}\label{sec:perfektesHashing}
+    Man möchte eine Hashfunktion $h$ mit $h(x) \neq h(y)$ für alle $x\neq y \in S$ finden.
+    Außerdem soll $h$ eine Hashtafel der Größe $m=\mathcal{O}(|S|)=\mathcal{O}(n)$ bilden.
+    Zusammengefasst: Man möchte eine Hashfunktion finden, die zwei unterschiedliche Inputparamter auch auf zwei unterschiedliche Werte mappt.
+    Außerdem soll nur linear viel Platz verbraucht werden.
+
+    \subsection*{Ansatz 1: Einstufiges perfektes Hashing}
+    Die Anzahl der Kollisionen, die eine Hashfunktion $h$ für eine Schlüsselmenge $S$ erzeugt, ist durch die folgende Funktion beschrieben:
+    \begin{equation*}
+        c_S(h) = \left| \{ x,y \} \in \binom{S}{2} : h(x)=h(y)\right|
+    \end{equation*}
+    Das Ziel sind $0$ Kollisionen, also
+    \begin{equation*}
+        c_S(h)=0 \quad \Leftrightarrow \quad h \underbrace{|_s}_{\substack{\text{Einge-} \\ \text{schränkt}}} \text{ injektiv}
+    \end{equation*}
+
+    \vspace*{0.4cm}
+    \textbf{\textsf{Satz:}} Für ein zufälliges $h \in \mathcal{H}$, wobei $\mathcal{H}$ $c$-universell ist, gilt:
+    \begin{equation*}
+        E(c_S(h)) \leq \left \binom{n}{2} \cdot \frac{c}{m}\right
+    \end{equation*}
+
+    \vspace*{0.3cm}
+    \textbf{\textsf{Beweis:}} Sei
+    \begin{equation*}
+        c_S(h)=\sum_{\{x,y \} \in \binom{S}{2}}^{}\delta_h(x,y)
+    \end{equation*}
+
+    und weiter
+    \begin{equation*}
+        \begin{align*}
+            E(c_S(h)) &=\sum_{\{x,y \} \in \binom{S}{2}}^{}E(\delta_h(x,y))=\sum_{\{x,y \} \in \binom{S}{2}}^{}\text{Pr}(\overbrace{\delta_h(x,y)=1}^{\leq \frac{c}{m}}) \\\nonumber
+            &\leq \binom{|S|}{2} \cdot \frac{c}{m} = \binom{n}{2} \cdot \frac{c}{m}
+        \end{align*}
+    \end{equation*}\proofend
+    \vspace*{0.6cm}
+
+    \textbf{\textsf{Korollar:}} Sei $\mathcal{H}$ eine $c$-universelle Familie von Hashfunktionen. Für $m > c \cdot \binom{n}{2}$ existiert ein $h \in \mathcal{H}$ mit $h|_s$ injektiv.
+
+    \vspace*{0.3cm}
+    \textbf{\textsf{(Probabilistischer) Beweis:}} Durch Einsetzen erhält man
+    \begin{equation*}
+        E(c_S(h)) &\leq \binom{n}{2} \cdot \frac{c}{m} < 1
+    \end{equation*}
+    Das bedeutet, \textbf{es gibt mindestens eine Hashfunktion $h$ mit keinen Kollisionen}.
+    \proofend
+
+    \newpage
+    \subsection*{Probleme mit einstufigem perfekten Hashing}
+    \begin{enumerate}
+        \item Der obige Satz ist nicht konstruktiv:
+        Ein zufällig gewähltes $\mathcal{H}$ könnte nur mit extrem geringer Wahrscheinlichkeit injektiv sein.
+        Das würde bedeuten, man bräuchte sehr viele Versuche, bis man ein injektives $h$ erwischt (\textit{Da lässt sich was machen}).
+        \item Ein Platzbedarf von $n^2$ ist schlecht (\textit{Dieser Nachteil bleibt bestehen}).
+    \end{enumerate}
+
+    %    \vspace*{0.3cm}
+    \textbf{\textsf{Korollar zu Problem 1:}} Falls $m > 2 \cdot c \cdot \binom{n}{2}$, kann in erwarteter $\mathcal{O}(n+m)$ Zeit eine injektive Hashfunktion gefunden werden.
+
+    \vspace*{0.3cm}
+    \textbf{\textsf{Beweis:}} Man erhält
+    \begin{equation*}
+        \begin{align*}
+            E(c_S(h)) &\leq \binom{n}{2} \cdot \frac{c}{m} &< \cancel{\binom{n}{2}} \cdot \frac{\cancel{c}}{2 \cdot \cancel{c} \cdot \cancel{\binom{n}{2}}} \\\nonumber
+            & = \frac{1}{2}
+        \end{align*}
+    \end{equation*}
+    Mit der Markov-Ungleichung erhält man nun
+    \begin{equation*}
+        \begin{align*}
+            \text{Pr}(X \geq c) &\leq \frac{E(X)}{c} \\\nonumber
+            \text{Pr}(c_S(h) \geq 1) &\leq \frac{\frac{1}{2}}{1} = \frac{1}{2}
+        \end{align*}
+    \end{equation*}\proofend
+
+    \vspace*{0.3cm}
+    Das bedeutet, man erhält mit einer Wahrscheinlichkeit von $\geq \frac{1}{2}$ eine Hashfunktion $h$, die keine Kollisionen provoziert.
+
+    \vspace*{0.3cm}
+    Beim einstufigen perfekten Hashing kann ein Zugriff in $\mathcal{O}(1)$ erzielt werden, man müsste aber quadratisch viel Platz (in $|S|$) dafür aufwenden.
+
+\end{document}
